@@ -31,18 +31,7 @@ npm install
 npm run dev
 ```
 
-## Dizin Yapısı
 
-```bash
-Tnc-WebProjects/
-├── README.md
-├── TaskProject-Management/
-│   ├── README.md
-│   ├── package.json
-│   ├── src/
-│   └── public/
-└── ...
-```
 
 ## Notlar
 
