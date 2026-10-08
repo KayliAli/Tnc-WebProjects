@@ -22,8 +22,10 @@ export const Login = ({ onLogin }) => {
     e.preventDefault();
     setHata('');
     
+    const cleanUsername = kullaniciAdi.trim().toLowerCase();
+
     const eslesenKullanici = kayitliKullanicilar.find(
-      u => u.kullanici_adi === kullaniciAdi && u.sifre === sifre
+      u => u.kullanici_adi.toLowerCase() === cleanUsername && u.sifre === sifre
     );
 
     if (eslesenKullanici) {

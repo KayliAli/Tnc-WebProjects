@@ -15,7 +15,7 @@ export const Register = ({ onLogin }) => {
   const [sifre, setSifre] = useState('');
   const [sifreTekrar, setSifreTekrar] = useState('');
   
-  // Davet varsa zorunlu 'kullanici' rolü, yoksa varsayılan 'kullanici'
+  // Davet ile gelindiyse rol otomatik 'kullanici' olur
   const [rol, setRol] = useState(inviteId ? 'kullanici' : 'kullanici');
   const [hata, setHata] = useState('');
   
@@ -31,14 +31,16 @@ export const Register = ({ onLogin }) => {
       return setHata('Şifreler birbiriyle uyuşmuyor!');
     }
 
-    if (kayitliKullanicilar.find(u => u.kullanici_adi === kullaniciAdi)) {
+    const cleanUsername = kullaniciAdi.trim().toLowerCase();
+
+    if (kayitliKullanicilar.some(u => u.kullanici_adi.toLowerCase() === cleanUsername)) {
       return setHata('Bu kullanıcı adı zaten alınmış!');
     }
 
     const yeniKullanici = {
       id: Date.now(),
-      ad_soyad: adSoyad,
-      kullanici_adi: kullaniciAdi,
+      ad_soyad: adSoyad.trim(),
+      kullanici_adi: cleanUsername,
       sifre: sifre,
       rol: rol
     };
@@ -50,9 +52,9 @@ export const Register = ({ onLogin }) => {
     if (invitedProject) {
       const updatedProjects = projects.map(p => {
         if (p.id === invitedProject.id) {
-          // Ekip üyelerinde zaten yoksa ekle
-          if (!p.ekip_uyeleri.includes(yeniKullanici.id)) {
-            return { ...p, ekip_uyeleri: [...p.ekip_uyeleri, yeniKullanici.id] };
+          const mevcutUyeler = p.ekip_uyeleri || [];
+          if (!mevcutUyeler.includes(yeniKullanici.id)) {
+            return { ...p, ekip_uyeleri: [...mevcutUyeler, yeniKullanici.id] };
           }
         }
         return p;
