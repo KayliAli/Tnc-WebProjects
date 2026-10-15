@@ -24,6 +24,8 @@ export const Register = ({ onLogin }) => {
   // Şifre görünürlük durumları
   const [sifreGoster, setSifreGoster] = useState(false);
   const [sifreTekrarGoster, setSifreTekrarGoster] = useState(false);
+  const passwordsMatch = sifre.length > 0 && sifreTekrar.length > 0 && sifre === sifreTekrar;
+  const showPasswordMismatch = sifreTekrar.length > 0 && sifre !== sifreTekrar;
   
   // Davet ile gelindiyse rol otomatik 'kullanici' olur
   const [rol, setRol] = useState(inviteId ? 'kullanici' : 'kullanici');
@@ -152,7 +154,6 @@ export const Register = ({ onLogin }) => {
               <input 
                 type="text" 
                 required
-                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                 value={adSoyad} 
                 onChange={(e) => setAdSoyad(e.target.value)} 
                 className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
@@ -181,6 +182,7 @@ export const Register = ({ onLogin }) => {
                     required 
                     value={sifre} 
                     onChange={(e) => setSifre(e.target.value)} 
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                     placeholder="••••••" 
                   />
                   <button
@@ -210,7 +212,13 @@ export const Register = ({ onLogin }) => {
                     required 
                     value={sifreTekrar} 
                     onChange={(e) => setSifreTekrar(e.target.value)} 
-                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-500/10"
+                    className={`w-full rounded-xl border bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all placeholder:text-slate-400 focus:bg-white focus:ring-4 ${
+                      showPasswordMismatch
+                        ? 'border-red-300 focus:border-red-300 focus:ring-red-500/10'
+                        : passwordsMatch
+                          ? 'border-emerald-300 focus:border-emerald-300 focus:ring-emerald-500/10'
+                          : 'border-slate-200 focus:border-indigo-300 focus:ring-indigo-500/10'
+                    }`}
                     placeholder="••••••" 
                   />
                   <button
@@ -232,6 +240,14 @@ export const Register = ({ onLogin }) => {
                 </div>
               </div>
             </div>
+            {sifreTekrar.length > 0 && (
+              <p
+                aria-live="polite"
+                className={`-mt-2 text-xs font-medium ${passwordsMatch ? 'text-emerald-700' : 'text-red-600'}`}
+              >
+                {passwordsMatch ? '✓ Şifreler uyuşuyor.' : 'Şifreler uyuşmuyor.'}
+              </p>
+            )}
 
             <button 
               type="submit" 
