@@ -1,1 +1,126 @@
 @import "tailwindcss";
+
+@layer base {
+  :root {
+    font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #1e293b;
+    background: #f8fafc;
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100vh;
+    margin: 0;
+    background:
+      radial-gradient(ellipse at top left, rgb(224 231 255 / 35%), transparent 34rem),
+      #f8fafc;
+  }
+
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  button:not(:disabled) {
+    transition: color 160ms ease, background-color 160ms ease, border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  button:focus-visible,
+  a:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 3px solid rgb(99 102 241 / 35%);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    color: #312e81;
+    background: #e0e7ff;
+  }
+}
+
+@keyframes home-enter {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes home-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  50% {
+    transform: translate3d(0, -16px, 0);
+  }
+}
+
+.home-enter {
+  animation: home-enter 650ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+
+.home-enter-1 {
+  animation-delay: 80ms;
+}
+
+.home-enter-2 {
+  animation-delay: 170ms;
+}
+
+.home-enter-3 {
+  animation-delay: 260ms;
+}
+
+.home-enter-4 {
+  animation-delay: 350ms;
+}
+
+.home-orb-slow {
+  animation: home-float 9s ease-in-out infinite;
+}
+
+.home-orb-delayed {
+  animation: home-float 11s ease-in-out 1s infinite reverse;
+}
+
+.home-chip {
+  transition: transform 180ms ease, color 180ms ease;
+}
+
+.home-chip:hover {
+  transform: translateY(-2px);
+}
+
+.home-feature-card {
+  transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+}
+
+.home-feature-card:hover {
+  transform: translateY(-5px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

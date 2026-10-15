@@ -19,31 +19,34 @@ export const EmployeeView = ({ user }) => {
   };
 
   return (
-    <div className="p-4 sm:p-8 w-full max-w-7xl mx-auto font-sans">
+    <div className="mx-auto w-full max-w-7xl p-4 font-sans sm:p-8">
       
-      {/* Karşılama */}
-      <div className="mb-8">
-        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-          Hoş geldin, {user?.ad_soyad?.split(' ')[0] || 'Çalışan'} 👋
-        </h1>
-        <p className="text-slate-500 mt-1">İşte dahil olduğun projeler ve üzerine atanan görevler.</p>
-      </div>
+      <section className="relative mb-7 overflow-hidden rounded-3xl border border-indigo-100 bg-gradient-to-br from-white via-indigo-50/80 to-violet-50 p-6 shadow-sm sm:p-8">
+        <div className="pointer-events-none absolute -right-8 -top-16 h-48 w-48 rounded-full bg-indigo-200/20 blur-2xl" />
+        <div className="relative">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-600">Çalışma alanım</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+            Hoş geldin, {user?.ad_soyad?.split(' ')[0] || 'Çalışan'} <span className="text-indigo-500">👋</span>
+          </h1>
+          <p className="mt-2 text-sm text-slate-600 sm:text-base">Projelerini ve üzerine atanan görevleri buradan takip edebilirsin.</p>
+        </div>
+      </section>
 
       {/* İstatistikler */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-        <div className="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/[0.025]">
           <div className="text-slate-500 text-sm font-medium mb-1">Toplam Görev</div>
           <div className="text-3xl font-bold text-slate-800">{stats.total}</div>
         </div>
-        <div className="bg-indigo-50 p-5 rounded-2xl border border-indigo-100 shadow-sm">
+        <div className="rounded-2xl border border-indigo-100 bg-indigo-50/80 p-5 shadow-sm">
           <div className="text-indigo-600 text-sm font-medium mb-1">Devam Eden</div>
           <div className="text-3xl font-bold text-indigo-700">{stats.inProgress}</div>
         </div>
-        <div className="bg-amber-50 p-5 rounded-2xl border border-amber-100 shadow-sm">
+        <div className="rounded-2xl border border-amber-100 bg-amber-50/80 p-5 shadow-sm">
           <div className="text-amber-600 text-sm font-medium mb-1">Bekleyen</div>
           <div className="text-3xl font-bold text-amber-700">{stats.pending}</div>
         </div>
-        <div className="bg-emerald-50 p-5 rounded-2xl border border-emerald-100 shadow-sm">
+        <div className="rounded-2xl border border-emerald-100 bg-emerald-50/80 p-5 shadow-sm">
           <div className="text-emerald-600 text-sm font-medium mb-1">Tamamlanan</div>
           <div className="text-3xl font-bold text-emerald-700">{stats.completed}</div>
         </div>

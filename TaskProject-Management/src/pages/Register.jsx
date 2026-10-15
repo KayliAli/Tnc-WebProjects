@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { INITIAL_USERS, INITIAL_PROJECTS } from '../constants/mockData';
 
+/** @typedef {import('../interfaces/User').User} User */
+/** @typedef {import('../interfaces/Project').Project} Project */
+
 export const Register = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
-  const inviteId = searchParams.get('invite');
+  const { inviteToken } = useParams();
+  const inviteId = inviteToken || searchParams.get('invite');
   
+  /** @type {User[]} */
   const [kayitliKullanicilar, setKayitliKullanicilar] = useLocalStorage('app_users', INITIAL_USERS);
+  /** @type {Project[]} */
   const [projects, setProjects] = useLocalStorage('app_projects', INITIAL_PROJECTS);
   
   const [adSoyad, setAdSoyad] = useState('');
@@ -25,11 +31,17 @@ export const Register = ({ onLogin }) => {
   
   const navigate = useNavigate();
 
-  const invitedProject = inviteId ? projects.find(p => p.id === Number(inviteId)) : null;
+  const invitedProject = inviteId
+    ? projects.find((project) => project.davet_kodu === inviteId || String(project.id) === inviteId)
+    : null;
 
   const handleRegister = (e) => {
     e.preventDefault();
     setHata('');
+
+    if (inviteToken && !invitedProject) {
+      return setHata('Davet bağlantısı geçersiz veya bu tarayıcıda projeye erişilemiyor. Proje yöneticisinden yeni bir bağlantı isteyin.');
+    }
 
     if (sifre !== sifreTekrar) {
       return setHata('Şifreler birbiriyle uyuşmuyor!');
@@ -57,7 +69,7 @@ export const Register = ({ onLogin }) => {
       const updatedProjects = projects.map(p => {
         if (p.id === invitedProject.id) {
           const mevcutUyeler = p.ekip_uyeleri || [];
-          if (!mevcutUyeler.includes(yeniKullanici.id)) {
+          if (!mevcutUyeler.some((memberId) => Number(memberId) === Number(yeniKullanici.id))) {
             return { ...p, ekip_uyeleri: [...mevcutUyeler, yeniKullanici.id] };
           }
         }
@@ -88,11 +100,17 @@ export const Register = ({ onLogin }) => {
           Ana Sayfaya Dön
         </Link>
 
-        <div className="bg-white/95 backdrop-blur p-8 rounded-2xl shadow-2xl max-w-md w-full border border-white/20">
+        <div className="w-full max-w-md rounded-3xl border border-white/60 bg-white/95 p-7 shadow-2xl shadow-slate-950/20 backdrop-blur-xl sm:p-8">
           <div className="text-center mb-6">
             <h1 className="text-2xl font-extrabold text-slate-900 mb-1">Hesap Oluştur</h1>
             <p className="text-slate-500 text-sm">GörevRotası'na katılın</p>
           </div>
+
+          {inviteToken && !invitedProject && (
+            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-center text-sm text-amber-800">
+              Davet bağlantısı geçersiz veya bu tarayıcıda projeye erişilemiyor. Proje yöneticisinden yeni bir bağlantı isteyin.
+            </div>
+          )}
 
           {invitedProject && (
             <div className="mb-6 p-4 bg-indigo-50/80 border border-indigo-100 rounded-xl text-center">
@@ -133,10 +151,11 @@ export const Register = ({ onLogin }) => {
               <label className="block text-sm font-medium text-slate-700 mb-1.5">Ad Soyad</label>
               <input 
                 type="text" 
-                required 
+                required
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                 value={adSoyad} 
                 onChange={(e) => setAdSoyad(e.target.value)} 
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                 placeholder="Örn: Hakan Yılmaz" 
               />
             </div>
@@ -148,7 +167,7 @@ export const Register = ({ onLogin }) => {
                 required 
                 value={kullaniciAdi} 
                 onChange={(e) => setKullaniciAdi(e.target.value)} 
-                className="w-full px-4 py-2.5 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                 placeholder="Örn: hakanyilmaz" 
               />
             </div>
@@ -162,7 +181,6 @@ export const Register = ({ onLogin }) => {
                     required 
                     value={sifre} 
                     onChange={(e) => setSifre(e.target.value)} 
-                    className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
                     placeholder="••••••" 
                   />
                   <button
@@ -192,7 +210,7 @@ export const Register = ({ onLogin }) => {
                     required 
                     value={sifreTekrar} 
                     onChange={(e) => setSifreTekrar(e.target.value)} 
-                    className="w-full px-4 py-2.5 pr-10 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-2.5 pr-10 outline-none transition-all focus:border-indigo-300 focus:bg-white focus:ring-2 focus:ring-indigo-500/10"
                     placeholder="••••••" 
                   />
                   <button
@@ -217,14 +235,14 @@ export const Register = ({ onLogin }) => {
 
             <button 
               type="submit" 
-              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg mt-2"
+              className="mt-2 w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white shadow-md shadow-indigo-600/15 transition-all hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-lg"
             >
               {invitedProject ? "Projeye Katıl ve Kayıt Ol" : "Kayıt Ol"}
             </button>
           </form>
 
           <p className="text-center text-sm text-slate-500 mt-6 font-medium">
-            Zaten hesabınız var mı? <Link to={`/login${inviteId ? `?invite=${inviteId}` : ''}`} className="text-indigo-600 font-bold hover:underline">Giriş Yap</Link>
+            Zaten hesabınız var mı? <Link to={inviteToken ? `/davet/${encodeURIComponent(inviteToken)}` : `/login${inviteId ? `?invite=${encodeURIComponent(inviteId)}` : ''}`} className="text-indigo-600 font-bold hover:underline">Giriş Yap</Link>
           </p>
         </div>
       </div>

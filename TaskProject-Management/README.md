@@ -84,6 +84,7 @@ Uygulama örnek verilerle gelir. Aşağıdaki hesaplarla giriş yapılabilir:
 ```bash
 src/
 ├── components/
+├── interfaces/ # User, Project ve Task veri modelleri
 ├── constants/
 ├── context/
 ├── hooks/

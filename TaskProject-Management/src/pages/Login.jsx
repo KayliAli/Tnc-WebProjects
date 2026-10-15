@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { INITIAL_USERS, INITIAL_PROJECTS } from '../constants/mockData';
 
+/** @typedef {import('../interfaces/User').User} User */
+/** @typedef {import('../interfaces/Project').Project} Project */
+
 export const Login = ({ onLogin }) => {
   const [searchParams] = useSearchParams();
-  const inviteId = searchParams.get('invite');
+  const { inviteToken } = useParams();
+  const inviteId = inviteToken || searchParams.get('invite');
 
+  /** @type {User[]} */
   const [kayitliKullanicilar] = useLocalStorage('app_users', INITIAL_USERS);
+  /** @type {Project[]} */
   const [projects, setProjects] = useLocalStorage('app_projects', INITIAL_PROJECTS);
   
   const [kullaniciAdi, setKullaniciAdi] = useState('');
@@ -17,11 +23,18 @@ export const Login = ({ onLogin }) => {
   
   const navigate = useNavigate();
 
-  const invitedProject = inviteId ? projects.find(p => p.id === Number(inviteId)) : null;
+  const invitedProject = inviteId
+    ? projects.find((project) => project.davet_kodu === inviteId || String(project.id) === inviteId)
+    : null;
 
   const handleLogin = (e) => {
     e.preventDefault();
     setHata('');
+
+    if (inviteToken && !invitedProject) {
+      setHata('Davet bağlantısı geçersiz veya bu tarayıcıda projeye erişilemiyor. Proje yöneticisinden yeni bir bağlantı isteyin.');
+      return;
+    }
     
     const cleanUsername = kullaniciAdi.trim().toLowerCase();
 
@@ -31,10 +44,10 @@ export const Login = ({ onLogin }) => {
 
     if (eslesenKullanici) {
       if (invitedProject) {
-        if (!invitedProject.ekip_uyeleri.includes(eslesenKullanici.id)) {
+        if (!(invitedProject.ekip_uyeleri || []).some((memberId) => Number(memberId) === Number(eslesenKullanici.id))) {
           const updatedProjects = projects.map(p => {
             if (p.id === invitedProject.id) {
-              return { ...p, ekip_uyeleri: [...p.ekip_uyeleri, eslesenKullanici.id] };
+              return { ...p, ekip_uyeleri: [...(p.ekip_uyeleri || []), eslesenKullanici.id] };
             }
             return p;
           });
@@ -66,11 +79,17 @@ export const Login = ({ onLogin }) => {
           Ana Sayfaya Dön
         </Link>
 
-        <div className="bg-white/95 backdrop-blur p-8 rounded-2xl shadow-2xl max-w-md w-full border border-white/20">
+        <div className="w-full max-w-md rounded-3xl border border-white/60 bg-white/95 p-7 shadow-2xl shadow-slate-950/20 backdrop-blur-xl sm:p-8">
           <div className="text-center mb-8">
             <h1 className="text-3xl font-extrabold text-slate-900 mb-2">GörevRotası</h1>
             <p className="text-slate-500">Çalışma alanınıza giriş yapın</p>
           </div>
+
+          {inviteToken && !invitedProject && (
+            <div className="mb-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-center text-sm text-amber-800">
+              Davet bağlantısı geçersiz veya bu tarayıcıda projeye erişilemiyor. Proje yöneticisinden yeni bir bağlantı isteyin.
+            </div>
+          )}
 
           {invitedProject && (
             <div className="mb-6 p-4 bg-indigo-50/80 border border-indigo-100 rounded-xl text-center">
@@ -94,7 +113,7 @@ export const Login = ({ onLogin }) => {
                 type="text" 
                 value={kullaniciAdi} 
                 onChange={(e) => setKullaniciAdi(e.target.value)} 
-                className="w-full px-4 py-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
+                className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                 placeholder="Kullanıcı adınızı giriniz"
                 required 
               />
@@ -107,7 +126,7 @@ export const Login = ({ onLogin }) => {
                   type={sifreGoster ? "text" : "password"} 
                   value={sifre} 
                   onChange={(e) => setSifre(e.target.value)} 
-                  className="w-full px-4 py-3 pr-11 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 outline-none transition-all bg-slate-50 focus:bg-white" 
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 pr-11 outline-none transition-all placeholder:text-slate-400 focus:border-indigo-300 focus:bg-white focus:ring-4 focus:ring-indigo-500/10"
                   placeholder="••••••••"
                   required 
                 />
@@ -134,14 +153,14 @@ export const Login = ({ onLogin }) => {
 
             <button 
               type="submit" 
-              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-xl hover:bg-indigo-700 transition-all shadow-md hover:shadow-lg mt-2"
+              className="mt-2 w-full rounded-xl bg-indigo-600 py-3 font-semibold text-white shadow-md shadow-indigo-600/15 transition-all hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-lg"
             >
               {invitedProject ? "Projeye Katıl ve Giriş Yap" : "Giriş Yap"}
             </button>
           </form>
 
           <p className="text-center text-sm text-slate-500 mt-6 font-medium">
-            Hesabınız yok mu? <Link to={`/register${inviteId ? `?invite=${inviteId}` : ''}`} className="text-indigo-600 font-bold hover:underline">Kayıt Ol</Link>
+            Hesabınız yok mu? <Link to={inviteToken ? `/davet/${encodeURIComponent(inviteToken)}/kayit` : `/register${inviteId ? `?invite=${encodeURIComponent(inviteId)}` : ''}`} className="text-indigo-600 font-bold hover:underline">Kayıt Ol</Link>
           </p>
         </div>
       </div>

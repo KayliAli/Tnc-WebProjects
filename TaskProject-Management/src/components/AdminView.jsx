@@ -110,11 +110,37 @@ export const AdminView = ({ projects = [], users = [], onCreateProject, onUpdate
     }
   };
 
+  const activeProjects = projects.filter((project) => project.durum === 'devam_ediyor').length;
+  const teamMembers = new Set(projects.flatMap((project) => project.ekip_uyeleri || [])).size;
+
   return (
-    <div className="p-4 md:p-8">
-      <div className="mb-6 flex items-center justify-between md:mb-8">
+    <div className="mx-auto max-w-7xl p-4 md:p-8">
+      <section className="relative mb-7 overflow-hidden rounded-3xl bg-gradient-to-br from-indigo-600 via-indigo-600 to-violet-700 p-6 text-white shadow-xl shadow-indigo-950/10 md:p-8">
+        <div className="pointer-events-none absolute -right-12 -top-24 h-64 w-64 rounded-full border-[36px] border-white/[0.07]" />
+        <div className="relative flex flex-col justify-between gap-6 md:flex-row md:items-end">
+          <div>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.18em] text-indigo-200">Genel bakış</p>
+            <h2 className="text-2xl font-bold tracking-tight md:text-3xl">Projeleriniz hazır</h2>
+            <p className="mt-2 max-w-lg text-sm leading-relaxed text-indigo-100">Ekibinizin çalışmalarını düzenleyin ve proje ilerlemesini tek ekrandan takip edin.</p>
+          </div>
+          <div className="grid grid-cols-3 gap-2 md:min-w-80 md:gap-3">
+            {[
+              ['Toplam proje', projects.length],
+              ['Aktif proje', activeProjects],
+              ['Ekip üyesi', teamMembers],
+            ].map(([label, value]) => (
+              <div key={label} className="rounded-2xl border border-white/15 bg-white/10 p-3 backdrop-blur-sm md:p-4">
+                <p className="text-xl font-bold md:text-2xl">{value}</p>
+                <p className="mt-1 text-[10px] font-medium text-indigo-100 md:text-xs">{label}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <div className="mb-5 flex flex-wrap items-end justify-between gap-4 md:mb-6">
         <div>
-          <h2 className="text-xl font-bold text-slate-800 md:text-2xl">Tüm Projeler</h2>
+          <h2 className="text-xl font-bold tracking-tight text-slate-800 md:text-2xl">Tüm Projeler</h2>
           <p className="mt-1 text-sm text-slate-500">Projeleri oluşturun, ekipleri yönetin ve bilgileri güncelleyin.</p>
         </div>
         <button onClick={() => setIsCreating(true)} className="rounded-xl bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-indigo-700 md:px-5 md:py-2.5">
@@ -127,7 +153,7 @@ export const AdminView = ({ projects = [], users = [], onCreateProject, onUpdate
       ) : (
         <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <div key={project.id} onClick={() => navigate(`/proje/${project.id}`)} className="group cursor-pointer rounded-2xl border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md md:p-6">
+            <div key={project.id} onClick={() => navigate(`/proje/${project.id}`)} className="group cursor-pointer rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/[0.025] transition duration-200 hover:-translate-y-0.5 hover:border-indigo-200 hover:shadow-lg hover:shadow-indigo-950/[0.06] md:p-6">
               <div className="mb-4 flex items-start justify-between gap-3">
                 <h3 className="text-lg font-bold text-slate-800 transition-colors group-hover:text-indigo-600">{project.proje_adi}</h3>
                 <span className={`shrink-0 rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider md:text-xs ${project.durum === 'devam_ediyor' ? 'border-blue-200 bg-blue-50 text-blue-600' : 'border-yellow-200 bg-yellow-50 text-yellow-600'}`}>

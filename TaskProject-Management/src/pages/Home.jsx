@@ -5,7 +5,7 @@ export const Home = () => {
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900 scroll-smooth">
       
       {/* 1. ÜST NAVİGASYON (HEADER) */}
-      <nav className="w-full bg-white/80 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50">
+      <nav className="sticky top-0 z-50 w-full border-b border-slate-200/70 bg-white/85 backdrop-blur-xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
           
           {/* Logo Kısmı */}
@@ -38,24 +38,25 @@ export const Home = () => {
         </div>
       </nav>
 
-      {/* 2. HERO (ANA KARŞILAMA) BÖLÜMÜ */}
-      <main className="flex-1 flex flex-col items-center justify-center text-center px-4 pt-24 pb-16">
-        <div className="inline-flex items-center px-4 py-2 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs sm:text-sm font-semibold mb-8 hover:bg-indigo-100 transition-colors cursor-default">
-          <span className="flex w-2 h-2 rounded-full bg-indigo-600 mr-2.5 animate-pulse"></span>
-          GörevRotası v1.0 Yayında!
+      {/* 2. ANA BANNER (HERO) */}
+      <main className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-indigo-100/70 via-indigo-50/70 to-white px-4 py-24 text-center sm:px-6 lg:px-8">
+        <div className="home-orb home-orb-slow pointer-events-none absolute -left-24 top-8 h-72 w-72 rounded-full bg-violet-200/30 blur-3xl" />
+        <div className="home-orb home-orb-delayed pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-indigo-200/35 blur-3xl" />
+        <div className="home-enter home-enter-1 relative mb-6 rounded-full border border-indigo-200/70 bg-white/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-indigo-700 shadow-sm">
+          PROJE VE GÖREV YÖNETİMİ
         </div>
         
-        <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold text-slate-900 mb-6 tracking-tight max-w-4xl leading-tight">
+        <h1 className="home-enter home-enter-2 relative mb-6 max-w-4xl text-4xl font-extrabold leading-tight tracking-tight text-slate-900 sm:text-5xl md:text-7xl">
           İşlerinizi <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-500">Tek Noktadan</span> Yönetin
         </h1>
         
-        <p className="text-base sm:text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p className="home-enter home-enter-3 relative mx-auto mb-10 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg md:text-xl">
           Ekibinizin görevlerini takip edin, iş süreçlerinizi hızlandırın ve verimliliğinizi artırın. 
           Karmaşık tablolara veda edin, modern arayüzle tanışın.
         </p>
         
-        <div className="flex flex-col sm:flex-row gap-4 justify-center w-full max-w-md mx-auto">
-          <Link to="/login" className="flex-1 px-8 py-4 text-sm sm:text-base font-semibold rounded-2xl text-white bg-indigo-600 hover:bg-indigo-700 transition-all shadow-lg hover:shadow-indigo-200 flex items-center justify-center gap-2">
+        <div className="home-enter home-enter-4 relative flex w-full max-w-md flex-col justify-center gap-4 sm:mx-auto sm:flex-row">
+          <Link to="/login" className="flex flex-1 items-center justify-center gap-2 rounded-2xl bg-indigo-600 px-8 py-4 text-sm font-semibold text-white shadow-lg shadow-indigo-600/20 transition hover:-translate-y-0.5 hover:bg-indigo-700 hover:shadow-xl hover:shadow-indigo-600/20 sm:text-base">
             Çalışma Alanına Git
           </Link>
         </div>
@@ -67,10 +68,10 @@ export const Home = () => {
           Modern ve Hızlı Teknolojilerle Geliştirildi
         </p>
         <div className="flex flex-wrap justify-center items-center gap-6 sm:gap-8 md:gap-16 text-slate-400 font-bold text-base sm:text-lg md:text-xl px-4">
-          <span className="flex items-center gap-2 hover:text-cyan-500 transition-colors cursor-default">⚛️ React.js</span>
-          <span className="flex items-center gap-2 hover:text-purple-500 transition-colors cursor-default">⚡ Vite</span>
-          <span className="flex items-center gap-2 hover:text-sky-400 transition-colors cursor-default">🌊 Tailwind CSS</span>
-          <span className="flex items-center gap-2 hover:text-yellow-500 transition-colors cursor-default">💾 LocalStorage</span>
+          <span className="home-chip flex cursor-default items-center gap-2 transition-colors hover:text-cyan-500">⚛️ React.js</span>
+          <span className="home-chip flex cursor-default items-center gap-2 transition-colors hover:text-purple-500">⚡ Vite</span>
+          <span className="home-chip flex cursor-default items-center gap-2 transition-colors hover:text-sky-400">🌊 Tailwind CSS</span>
+          <span className="home-chip flex cursor-default items-center gap-2 transition-colors hover:text-yellow-500">💾 LocalStorage</span>
         </div>
       </div>
 
@@ -83,7 +84,7 @@ export const Home = () => {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
+            <div className="home-feature-card p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
               <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-6">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" /></svg>
               </div>
@@ -91,7 +92,7 @@ export const Home = () => {
               <p className="text-slate-500 leading-relaxed text-sm sm:text-base">Görevleri oluşturun, önceliklendirin ve ekip üyelerine atayın. Her şey tek bir ekranda.</p>
             </div>
 
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
+            <div className="home-feature-card p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
               <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-6">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
               </div>
@@ -99,7 +100,7 @@ export const Home = () => {
               <p className="text-slate-500 leading-relaxed text-sm sm:text-base">Departmanlara göre çalışanları görün. Kimin hangi projede çalıştığını anında takip edin.</p>
             </div>
 
-            <div className="p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
+            <div className="home-feature-card p-6 sm:p-8 rounded-3xl bg-slate-50 border border-slate-100 hover:border-indigo-100 hover:shadow-xl hover:shadow-indigo-50 transition-all duration-300">
               <div className="w-12 h-12 bg-indigo-100 rounded-xl flex items-center justify-center text-indigo-600 mb-6">
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
               </div>
