@@ -1,6 +1,31 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 export const Home = () => {
+  const [activeSection, setActiveSection] = useState(() => window.location.hash.slice(1) || 'anasayfa');
+
+  useEffect(() => {
+    const sectionIds = ['anasayfa', 'ozellikler', 'hakkimizda', 'iletisim'];
+
+    const updateActiveSection = () => {
+      const activeId = [...sectionIds].reverse().find((id) => {
+        const section = document.getElementById(id);
+        return section && section.getBoundingClientRect().top <= 140;
+      });
+
+      setActiveSection(activeId || sectionIds[0]);
+    };
+
+    updateActiveSection();
+    window.addEventListener('scroll', updateActiveSection, { passive: true });
+    window.addEventListener('hashchange', updateActiveSection);
+
+    return () => {
+      window.removeEventListener('scroll', updateActiveSection);
+      window.removeEventListener('hashchange', updateActiveSection);
+    };
+  }, []);
+
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans selection:bg-indigo-100 selection:text-indigo-900 scroll-smooth">
       
@@ -20,9 +45,25 @@ export const Home = () => {
           
           {/* Menü Linkleri (Sadece PC'de görünür, mobilde kalabalık yapmaması için) */}
           <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-            <a href="#ozellikler" className="hover:text-indigo-600 transition-colors">Özellikler</a>
-            <a href="#hakkimizda" className="hover:text-indigo-600 transition-colors">Hakkımızda</a>
-            <a href="#iletisim" className="hover:text-indigo-600 transition-colors">İletişim</a>
+            {[
+              ['anasayfa', 'Ana Sayfa'],
+              ['ozellikler', 'Özellikler'],
+              ['hakkimizda', 'Hakkımızda'],
+              ['iletisim', 'İletişim'],
+            ].map(([id, label]) => (
+              <a
+                key={id}
+                href={`#${id}`}
+                aria-current={activeSection === id ? 'location' : undefined}
+                className={`relative py-2 transition-colors after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:rounded-full after:bg-indigo-600 after:transition-transform after:duration-200 ${
+                  activeSection === id
+                    ? 'font-semibold text-indigo-700 after:scale-x-100'
+                    : 'after:scale-x-0 hover:text-indigo-600 hover:after:scale-x-100'
+                }`}
+              >
+                {label}
+              </a>
+            ))}
           </div>
 
           {/* Aksiyon Butonları (Mobilde yan yana sığması için boyutlar optimize edildi) */}
@@ -39,7 +80,7 @@ export const Home = () => {
       </nav>
 
       {/* 2. ANA BANNER (HERO) */}
-      <main className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-indigo-100/70 via-indigo-50/70 to-white px-4 py-24 text-center sm:px-6 lg:px-8">
+      <main id="anasayfa" className="relative flex scroll-mt-20 flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-indigo-100/70 via-indigo-50/70 to-white px-4 py-24 text-center sm:px-6 lg:px-8">
         <div className="home-orb home-orb-slow pointer-events-none absolute -left-24 top-8 h-72 w-72 rounded-full bg-violet-200/30 blur-3xl" />
         <div className="home-orb home-orb-delayed pointer-events-none absolute -right-20 bottom-0 h-80 w-80 rounded-full bg-indigo-200/35 blur-3xl" />
         <div className="home-enter home-enter-1 relative mb-6 rounded-full border border-indigo-200/70 bg-white/70 px-4 py-1.5 text-xs font-semibold tracking-wide text-indigo-700 shadow-sm">
