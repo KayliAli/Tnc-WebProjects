@@ -1,15 +1,21 @@
+/** @typedef {import('../interfaces/User').User} User */
+/** @typedef {import('../interfaces/Project').Project} Project */
+/** @typedef {import('../interfaces/Task').Task} Task */
+
+/** @type {User[]} */
 export const INITIAL_USERS = [
   { id: 101, ad_soyad: "Hakan Yılmaz", kullanici_adi: "hakan", sifre: "123456", rol: "yonetici" },
   { id: 102, ad_soyad: "Test Kullanıcı", kullanici_adi: "test", sifre: "123456", rol: "kullanici" }
 ];
 
+/** @type {Project[]} */
 export const INITIAL_PROJECTS = [
   {
     id: 1,
     proje_adi: "Mobil Uygulama Yenileme",
     aciklama: "Müşterinin e-ticaret mobil uygulamasının modernizasyonu ve hızlandırılması.",
     durum: "devam_ediyor",
-    ekip_uyeleri: [102, 103], // Zeynep ve Caner bu projede
+    ekip_uyeleri: [102, 103],
     olusturan_id: 101
   },
   {
@@ -22,13 +28,14 @@ export const INITIAL_PROJECTS = [
   }
 ];
 
+/** @type {Task[]} */
 export const INITIAL_TASKS = [
   {
     id: 1001,
     proje_id: 1, // Mobil Uygulama projesine ait
     gorev_adi: "Ana Sayfa Tasarımı",
     gorev_detayi: "Figma üzerinden yeni ana sayfa tasarımı yapılacak.",
-    durum: "tamamlandı",
+    durum: "bekliyor",
     oncelik: "yüksek",
     calisan_id: 103 // Caner'e atanmış
   }

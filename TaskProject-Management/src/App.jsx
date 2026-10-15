@@ -5,8 +5,12 @@ import { Login } from './pages/Login';
 import { Register } from './pages/Register';
 import { Dashboard } from './pages/Dashboard';
 import { ProjectDetail } from './pages/ProjectDetail'; // BNU EKLEDİK
+import { InviteRoute } from './pages/InviteRoute';
+
+/** @typedef {import('./interfaces/User').User} User */
 
 function App() {
+  /** @type {[User | null, (user: User | null) => void]} */
   const [user, setUser] = useLocalStorage('app_session', null);
 
   return (
@@ -16,6 +20,8 @@ function App() {
         
         <Route path="/login" element={user ? <Navigate to="/dashboard" replace /> : <Login onLogin={setUser} />} />
         <Route path="/register" element={user ? <Navigate to="/dashboard" replace /> : <Register onLogin={setUser} />} />
+        <Route path="/davet/:inviteToken" element={<InviteRoute user={user} onLogin={setUser} />} />
+        <Route path="/davet/:inviteToken/kayit" element={user ? <Navigate to="/dashboard" replace /> : <Register onLogin={setUser} />} />
         
         <Route path="/dashboard" element={user ? <Dashboard onLogout={() => setUser(null)} /> : <Navigate to="/login" replace />} />
         

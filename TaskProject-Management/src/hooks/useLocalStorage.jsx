@@ -25,6 +25,12 @@ const decryptData = (encryptedText) => {
   }
 };
 
+/**
+ * @template T
+ * @param {string} key
+ * @param {T} initialValue
+ * @returns {[T, (value: T | ((currentValue: T) => T)) => void]}
+ */
 export const useLocalStorage = (key, initialValue) => {
   // 1. State'i Başlatma ve Okuma İşlemi
   const [storedValue, setStoredValue] = useState(() => {
