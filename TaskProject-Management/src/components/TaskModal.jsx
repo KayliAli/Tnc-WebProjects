@@ -1,24 +1,38 @@
 import { useState } from 'react';
+import { normalizeTaskStatus } from '../utils/taskStatus';
+
+/** @typedef {import('../interfaces/Task').Task} Task */
+/** @typedef {import('../interfaces/Task').TaskInput} TaskInput */
+/** @typedef {import('../interfaces/User').User} User */
 
 // 1. İÇ BİLEŞEN: Sadece Modal açıkken var olur. Bu yüzden useEffect'e gerek kalmaz!
+/** @param {{ onClose: () => void, onSave: (task: TaskInput) => void, projectTeam?: User[], editingTask?: Task | null }} props */
 const ModalContent = ({ onClose, onSave, projectTeam = [], editingTask = null }) => {
+  const assignedUserId = editingTask?.calisan_id ?? editingTask?.atanan_kullanici_id;
   // State'ler doğrudan gelen proplardan (editingTask) varsayılan değerini alır
   const [gorevAdi, setGorevAdi] = useState(editingTask?.gorev_adi || '');
   const [gorevDetayi, setGorevDetayi] = useState(editingTask?.gorev_detayi || '');
   const [oncelik, setOncelik] = useState(editingTask?.oncelik || 'orta');
-  const [calisanId, setCalisanId] = useState(editingTask?.calisan_id ? String(editingTask.calisan_id) : '');
-  const [durum, setDurum] = useState(editingTask?.durum || 'beklemede');
+  const [calisanId, setCalisanId] = useState(assignedUserId != null ? String(assignedUserId) : '');
+  const [durum, setDurum] = useState(normalizeTaskStatus(editingTask?.durum || 'bekliyor'));
+  const [statusWasChanged, setStatusWasChanged] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
+    const assignmentChanged = Boolean(calisanId) && Number(calisanId) !== Number(assignedUserId);
+    const shouldResetCompletedTask = editingTask
+      && assignmentChanged
+      && !statusWasChanged
+      && normalizeTaskStatus(editingTask.durum) === 'tamamlandi';
+
     const taskData = {
       ...(editingTask || {}), 
       gorev_adi: gorevAdi,
       gorev_detayi: gorevDetayi,
       oncelik: oncelik,
       calisan_id: calisanId ? Number(calisanId) : null,
-      durum: durum
+      durum: shouldResetCompletedTask ? 'bekliyor' : normalizeTaskStatus(durum)
     };
 
     onSave(taskData);
@@ -83,8 +97,8 @@ const ModalContent = ({ onClose, onSave, projectTeam = [], editingTask = null })
           {editingTask && (
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">Görev Durumu</label>
-              <select value={durum} onChange={(e) => setDurum(e.target.value)} className="w-full px-4 py-2 border border-slate-200 rounded-xl outline-none bg-white">
-                <option value="beklemede">Beklemede</option>
+              <select value={durum} onChange={(e) => { setDurum(e.target.value); setStatusWasChanged(true); }} className="w-full px-4 py-2 border border-slate-200 rounded-xl outline-none bg-white">
+                <option value="bekliyor">Beklemede</option>
                 <option value="devam_ediyor">Devam Ediyor</option>
                 <option value="tamamlandi">Tamamlandı</option>
               </select>
@@ -104,6 +118,7 @@ const ModalContent = ({ onClose, onSave, projectTeam = [], editingTask = null })
 };
 
 // 2. DIŞ BİLEŞEN: Sistemin diğer sayfaları (Dashboard, ProjectDetail) burayı çağırır.
+/** @param {{ isOpen: boolean, onClose: () => void, onSave: (task: TaskInput) => void, projectTeam?: User[], editingTask?: Task | null }} props */
 export const TaskModal = (props) => {
   // Eğer isOpen false ise (modal kapalıysa) hiçbir şey çizme. 
   // Bu sayede modal her açıldığında ModalContent sıfırdan yüklenir.
