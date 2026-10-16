@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>GörevRotası | Sistem Dokümantasyonu</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #16232b;
+      --muted: #52636b;
+      --line: #d8e2e3;
+      --paper: #ffffff;
+      --soft: #f1f6f5;
+      --teal: #087e78;
+      --teal-dark: #075b58;
+      --coral: #df725b;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0 auto;
+      max-width: 900px;
+      padding: 36px 54px 64px;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Segoe UI", Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.62;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { color: var(--ink); line-height: 1.2; }
+    h1 { font-size: 31pt; margin-bottom: 14px; }
+    h2 { font-size: 20pt; margin: 0 0 14px; }
+    h3 { font-size: 13pt; margin: 22px 0 8px; }
+    p { margin-bottom: 12px; }
+    a { color: var(--teal-dark); text-decoration: none; }
+    code, pre { font-family: Consolas, "Courier New", monospace; }
+    code { background: #edf3f2; border-radius: 3px; padding: 1px 4px; font-size: 9.5pt; }
+    pre {
+      white-space: pre-wrap;
+      background: #14252a;
+      color: #edf7f5;
+      padding: 14px 17px;
+      border-radius: 7px;
+      font-size: 9pt;
+      line-height: 1.5;
+      break-inside: avoid;
+    }
+    ul, ol { padding-left: 22px; margin: 7px 0 14px; }
+    li { margin: 3px 0; }
+    .cover {
+      min-height: 850px;
+      margin: -36px -54px 50px;
+      padding: 68px 58px;
+      color: #f7fbfa;
+      background: linear-gradient(145deg, #102c32 0%, #075b58 70%, #087e78 100%);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+    }
+    .cover h1 { max-width: 620px; margin: 0; color: #fff; font-size: 42pt; }
+    .cover p { color: #dcecea; }
+    .cover a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+    .cover-top { display: flex; align-items: center; gap: 12px; color: #e3f4f1; font-size: 10pt; font-weight: 700; letter-spacing: 1px; }
+    .brand-mark { width: 38px; height: 38px; border: 1px solid #8ac9c0; border-radius: 10px; display: grid; place-items: center; color: #fff; font-size: 16pt; }
+    .cover-main { padding: 38px 0; }
+    .cover-kicker { color: #9bd4cc !important; font-size: 10pt; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    .cover-subtitle { max-width: 540px; margin: 22px 0 0; font-size: 15pt; }
+    .cover-meta { display: grid; grid-template-columns: 1fr 1fr; gap: 18px 30px; max-width: 600px; border-top: 1px solid #ffffff55; padding-top: 20px; }
+    .cover-meta strong { display: block; color: #9bd4cc; font-size: 8pt; letter-spacing: 1px; text-transform: uppercase; }
+    .cover-meta span { font-size: 10pt; }
+    .cover-footer { color: #b5d7d3; font-size: 9pt; }
+    .eyebrow { margin-bottom: 7px; color: var(--teal); font-size: 9pt; font-weight: 700; letter-spacing: 1.6px; text-transform: uppercase; }
+    .lead { color: var(--muted); font-size: 13pt; }
+    .section { margin: 0 0 36px; }
+    .section-title { border-bottom: 2px solid var(--teal); padding-bottom: 9px; }
+    .callout { margin: 16px 0; padding: 13px 16px; border-left: 4px solid var(--teal); background: var(--soft); break-inside: avoid; }
+    .warning { border-color: var(--coral); background: #fff5f1; }
+    .toc { padding: 20px 24px; border: 1px solid var(--line); border-radius: 8px; background: #fbfdfc; }
+    .toc ol { columns: 2; column-gap: 40px; }
+    .toc li { break-inside: avoid; padding: 2px 0; }
+    table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 9.6pt; }
+    th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: #eaf2f1; color: #18383a; font-weight: 700; }
+    tr { break-inside: avoid; }
+    .route { white-space: nowrap; font-family: Consolas, monospace; font-size: 9pt; }
+    .key { white-space: nowrap; font-family: Consolas, monospace; }
+    .small { color: var(--muted); font-size: 9pt; }
+    .diagram { padding: 16px; background: #14252a; border-radius: 7px; color: #f2f8f7; text-align: center; font-family: Consolas, monospace; font-size: 9pt; line-height: 1.75; break-inside: avoid; }
+    .screen-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    figure { margin: 0 0 12px; padding: 8px; border: 1px solid var(--line); border-radius: 6px; break-inside: avoid; }
+    figure img { display: block; width: 100%; height: 150px; object-fit: contain; background: #f4f6f6; }
+    figcaption { padding: 7px 2px 1px; color: var(--muted); font-size: 9pt; font-weight: 600; }
+    .page-break { page-break-before: always; break-before: page; }
+    .footnote { margin-top: 34px; padding-top: 10px; border-top: 1px solid var(--line); color: var(--muted); font-size: 8.5pt; }
+    @page { size: A4; margin: 17mm 17mm 18mm; }
+    @media print {
+      body { max-width: none; padding: 0; font-size: 10pt; }
+      .cover { min-height: 260mm; margin: -17mm; padding: 24mm 19mm; }
+      a { color: inherit; }
+      .section { margin-bottom: 26px; }
+      h2, h3 { break-after: avoid; }
+      .screen-grid { gap: 8px; }
+      figure img { height: 125px; }
+      pre { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .cover, .callout, .warning, th, .diagram { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
+  </style>
+</head>
+<body>
+  <header class="cover">
+    <div class="cover-top"><span class="brand-mark">G</span><span>TNC WEB PROJECTS</span></div>
+    <div class="cover-main">
+      <p class="cover-kicker">Sistem Dokümantasyonu</p>
+      <h1>GörevRotası</h1>
+      <p class="cover-subtitle">Görev ve proje yönetimi uygulamasının kullanıcı rehberi, teknik mimarisi, veri modeli ve işletim notları.</p>
+    </div>
+    <div>
+      <div class="cover-meta">
+        <div><strong>Canlı uygulama</strong><span><a href="https://gorevrotasi.netlify.app">gorevrotasi.netlify.app</a></span></div>
+        <div><strong>Teknoloji</strong><span>React · Vite · Tailwind CSS</span></div>
+        <div><strong>Doküman türü</strong><span>Kullanıcı ve teknik rehber</span></div>
+        <div><strong>Hazırlanma tarihi</strong><span>15 Ekim 2026</span></div>
+      </div>
+      <p class="cover-footer">Bu doküman, repository içindeki mevcut uygulama davranışına göre hazırlanmıştır.</p>
+    </div>
+  </header>
+
+  <section class="section">
+    <p class="eyebrow">Başlangıç</p>
+    <h2 class="section-title">İçindekiler</h2>
+    <nav class="toc" aria-label="İçindekiler">
+      <ol>
+        <li><a href="#overview">Sisteme genel bakış</a></li>
+        <li><a href="#roles">Roller ve yetenekler</a></li>
+        <li><a href="#workflows">Kullanım akışları</a></li>
+        <li><a href="#architecture">Mimari ve rotalar</a></li>
+        <li><a href="#data">Veri modeli ve saklama</a></li>
+        <li><a href="#security">Güvenlik ve sınırlar</a></li>
+        <li><a href="#setup">Kurulum ve komutlar</a></li>
+        <li><a href="#deployment">Build ve dağıtım</a></li>
+        <li><a href="#troubleshooting">Sorun giderme</a></li>
+        <li><a href="#structure">Kaynak kod yapısı</a></li>
+        <li><a href="#screenshots">Ekran görüntüleri</a></li>
+      </ol>
+    </nav>
+  </section>
+
+  <section class="section" id="overview">
+    <p class="eyebrow">01 · Genel Bakış</p>
+    <h2 class="section-title">Sisteme genel bakış</h2>
+    <p class="lead">GörevRotası, proje ekiplerinin işlerini düzenlemesi ve görev ilerlemesini takip etmesi için hazırlanmış tarayıcı tabanlı bir uygulamadır.</p>
+    <p>Sistem; herkese açık tanıtım sayfası, hesap oluşturma ve giriş ekranları, rol bazlı çalışma alanları ve proje detay ekranlarından oluşur. Yönetici projeleri ve ekip atamalarını yönetir; çalışanlar dahil oldukları projeleri ve kendilerine atanmış görevleri görüntüler.</p>
+    <div class="callout"><strong>Çalışma modeli:</strong> Uygulamada sunucu, API veya merkezi veritabanı bulunmaz. Kullanıcı, proje, görev ve oturum verileri o tarayıcı profilinin LocalStorage alanında tutulur.</div>
+    <p><strong>Canlı adres:</strong> <a href="https://gorevrotasi.netlify.app">https://gorevrotasi.netlify.app</a></p>
+  </section>
+
+  <section class="section" id="roles">
+    <p class="eyebrow">02 · Roller</p>
+    <h2 class="section-title">Roller ve yetenekler</h2>
+    <table>
+      <thead><tr><th>Rol</th><th>Çalışma alanı</th><th>Yetenekler</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Yönetici</strong><br><code>yonetici</code></td><td>Yönetici Paneli</td><td>Projeleri listeleme, oluşturma, düzenleme ve silme; ekip üyelerini projeye ekleme; proje görevlerini oluşturma ve düzenleme; davet bağlantısı kopyalama.</td></tr>
+        <tr><td><strong>Çalışan</strong><br><code>kullanici</code></td><td>Çalışma Alanım</td><td>Dahil olduğu projeleri ve kendisine atanan görevleri görüntüleme; görev durumunu Beklemede’den Devam Ediyor’a, ardından Tamamlandı’ya ilerletme; proje ve görev ayrıntılarını görüntüleme.</td></tr>
+      </tbody>
+    </table>
+    <p>Yeni kayıt ekranında kullanıcı rolü seçilebilir. Davet üzerinden açılan kayıt akışı çalışan rolüyle devam eder. Uygulama arayüzünde “Çalışan” etiketi kullanılsa da veri modelindeki rol değeri <code>kullanici</code> şeklindedir.</p>
+  </section>
+
+  <section class="section" id="workflows">
+    <p class="eyebrow">03 · Kullanım</p>
+    <h2 class="section-title">Kullanım akışları</h2>
+    <h3>İlk kullanım ve giriş</h3>
+    <ol>
+      <li>Ana sayfadan Giriş Yap veya Hemen Başla bağlantısıyla giriş ekranına geçilir.</li>
+      <li>Yeni kullanıcı Kayıt Ol ekranından ad, kullanıcı adı ve parola ile hesap oluşturabilir; kayıt tamamlanınca oturum otomatik açılır.</li>
+      <li>İlk açılışta örnek kullanıcılar, projeler ve görevler yerel depolamaya başlangıç verisi olarak yazılır.</li>
+    </ol>
+    <h3>Örnek hesaplar</h3>
+    <table>
+      <thead><tr><th>Rol</th><th>Kullanıcı adı</th><th>Parola</th></tr></thead>
+      <tbody>
+        <tr><td>Yönetici</td><td><code>hakan</code></td><td><code>123456</code></td></tr>
+        <tr><td>Çalışan</td><td><code>test</code></td><td><code>123456</code></td></tr>
+      </tbody>
+    </table>
+    <p class="small">Bu kimlik bilgileri yalnızca örnek/demo verisidir. Uygulamanın ilk kez açıldığı tarayıcıda kullanılabilir; kayıtlı LocalStorage verisi varsa içerik farklı olabilir.</p>
+    <h3>Proje ve görev yönetimi</h3>
+    <ol>
+      <li>Yönetici panelinde Yeni Proje seçilir; proje adı, açıklama, durum ve ekip üyeleri belirlenir.</li>
+      <li>Proje kartından proje ayrıntılarına geçilir. Yönetici Yeni Görev ile başlık, açıklama, öncelik ve isteğe bağlı görevli belirler.</li>
+      <li>Görevler Beklemede, Devam Ediyor veya Tamamlandı durumlarında izlenir. Yönetici görev bilgisini ve durumunu düzenleyebilir.</li>
+      <li>Çalışan paneli yalnızca çalışanın dahil olduğu projeleri ve kendisine atanmış görevleri gösterir. Çalışan, bekleyen görevi başlatabilir ve devam eden görevi tamamlayabilir.</li>
+      <li>Bir proje silindiğinde projeye bağlı görevler de silinir.</li>
+    </ol>
+    <h3>Davet akışı</h3>
+    <p>Yönetici proje ekranında Davet Et bağlantısını kopyalar. Bağlantıyı açan kullanıcı giriş yapabilir veya davet bağlamında kayıt olabilir; başarılı katılımda kullanıcı proje ekibine eklenir.</p>
+    <div class="callout warning"><strong>Önemli:</strong> Davet kodu proje verisinin kendisini taşımaz. Hedef tarayıcıda aynı proje LocalStorage verisi bulunmuyorsa davet geçersiz görünür. Bu akış farklı cihazlar arasında merkezi bir ekip daveti sağlamaz.</div>
+  </section>
+
+  <section class="section page-break" id="architecture">
+    <p class="eyebrow">04 · Teknik Tasarım</p>
+    <h2 class="section-title">Mimari ve rotalar</h2>
+    <p>Uygulama, istemci tarafında çalışan bir React SPA’dır. Arayüz bileşenleri kullanıcı etkileşimlerini toplar; servis hook’ları iş verilerini yönetir; ortak LocalStorage hook’ı güncel state’i tarayıcı depolamasına yazar.</p>
+    <div class="diagram">React Router<br>↓<br>Sayfalar ve rol bazlı görünümler<br>↓<br>AdminService / EmployeeService<br>↓<br>useLocalStorage hook’ı<br>↓<br>Tarayıcı LocalStorage</div>
+    <p class="small">Backend, REST/GraphQL API veya merkezi veritabanı katmanı yoktur. Netlify statik dağıtımı uygulama verilerini senkronize etmez.</p>
+    <h3>Uygulama rotaları</h3>
+    <table>
+      <thead><tr><th>Rota</th><th>Erişim</th><th>Açıklama</th></tr></thead>
+      <tbody>
+        <tr><td class="route">/</td><td>Herkese açık</td><td>Ana sayfa, özellikler, hakkında ve iletişim bölümleri.</td></tr>
+        <tr><td class="route">/login</td><td>Oturum yok</td><td>Giriş. Oturum açıksa çalışma alanına yönlendirir.</td></tr>
+        <tr><td class="route">/register</td><td>Oturum yok</td><td>Yeni kullanıcı kaydı ve rol seçimi.</td></tr>
+        <tr><td class="route">/dashboard</td><td>Oturum gerekli</td><td>Role göre yönetici veya çalışan paneli.</td></tr>
+        <tr><td class="route">/proje/:id</td><td>Oturum gerekli</td><td>Yönetici veya proje üyesi için proje ayrıntıları.</td></tr>
+        <tr><td class="route">/davet/:inviteToken</td><td>Davet bağlantısı</td><td>Davet kodunu doğrulama, giriş ve proje üyeliğine katılım.</td></tr>
+        <tr><td class="route">/davet/:inviteToken/kayit</td><td>Davet bağlantısı</td><td>Davet bağlamında kayıt. Oturum açıksa dashboard’a yönlendirir.</td></tr>
+      </tbody>
+    </table>
+    <p>Oturum denetimi <code>App.jsx</code> içindeki route yönlendirmeleriyle yapılır. Proje ayrıntı ekranı ayrıca yöneticiyi veya proje ekibi üyesini kontrol eder.</p>
+  </section>
+
+  <section class="section" id="data">
+    <p class="eyebrow">05 · Veri</p>
+    <h2 class="section-title">Veri modeli ve saklama</h2>
+    <table>
+      <thead><tr><th>Varlık</th><th>Temel alanlar</th><th>Durum / ilişki</th></tr></thead>
+      <tbody>
+        <tr><td>Kullanıcı</td><td><code>id</code>, <code>ad_soyad</code>, <code>kullanici_adi</code>, <code>sifre</code>, <code>rol</code></td><td>Rol: <code>yonetici</code> veya <code>kullanici</code>.</td></tr>
+        <tr><td>Proje</td><td><code>id</code>, <code>proje_adi</code>, <code>aciklama</code>, <code>durum</code>, <code>ekip_uyeleri</code>, <code>olusturan_id</code>, <code>davet_kodu</code></td><td>Proje durumu: <code>devam_ediyor</code> veya <code>beklemede</code>. Ekip üyeleri kullanıcı kimlikleridir.</td></tr>
+        <tr><td>Görev</td><td><code>id</code>, <code>proje_id</code>, <code>gorev_adi</code>, <code>gorev_detayi</code>, <code>durum</code>, <code>oncelik</code>, <code>calisan_id</code>, <code>son_tarih</code></td><td>Görev proje ile ilişkilidir; çalışan ataması isteğe bağlıdır. Öncelik Düşük, Orta veya Yüksek olabilir.</td></tr>
+      </tbody>
+    </table>
+    <h3>LocalStorage anahtarları</h3>
+    <table>
+      <thead><tr><th>Anahtar</th><th>İçerik</th></tr></thead>
+      <tbody>
+        <tr><td class="key">app_session</td><td>Mevcut oturum açmış kullanıcı veya <code>null</code>.</td></tr>
+        <tr><td class="key">app_users</td><td>Başlangıç kullanıcıları ve tarayıcıda oluşturulan kayıtlar.</td></tr>
+        <tr><td class="key">app_projects</td><td>Projeler, ekip üyesi kimlikleri ve davet kodları.</td></tr>
+        <tr><td class="key">app_tasks</td><td>Görevler, durumlar, öncelikler ve atama bilgileri.</td></tr>
+      </tbody>
+    </table>
+    <p>İlk değerler <code>src/constants/mockData.js</code> içinden yüklenir. Veriler aynı origin ve tarayıcı profilinde sayfa yenilendiğinde kalır. Tarayıcı verilerinin silinmesi uygulama state’ini de siler.</p>
+  </section>
+
+  <section class="section page-break" id="security">
+    <p class="eyebrow">06 · Güvenlik</p>
+    <h2 class="section-title">Güvenlik ve ürün sınırları</h2>
+    <ul>
+      <li><strong>Gerçek kimlik doğrulama yoktur.</strong> Kullanıcı kontrolü ve rol yönlendirmesi istemci tarafında yapılır; backend tarafından doğrulanmaz.</li>
+      <li><strong>LocalStorage güvenli kasa değildir.</strong> Uygulama içindeki Base64/ters çevirme işlemi şifreleme veya parola hash’i değildir. Tarayıcı depolamasına erişebilen biri verileri okuyabilir.</li>
+      <li><strong>Parolalar demo verisidir.</strong> Gerçek, hassas veya tekrar kullanılan parolaları bu uygulamada kullanmayın.</li>
+      <li><strong>Veriler kullanıcılar arasında senkronize edilmez.</strong> Her cihaz ve tarayıcı profili kendi kullanıcı/proje/görev kopyasını tutar; sunucu yedeklemesi yoktur.</li>
+      <li><strong>Davet bağlantıları yerel proje kaydına bağlıdır.</strong> Sunucu tarafında davet saklama veya token doğrulama hizmeti yoktur.</li>
+      <li><strong>İletişim formu görsel arayüzdür.</strong> Mevcut form gönderimi bir e-posta veya backend servisine iletmez.</li>
+    </ul>
+    <div class="callout warning"><strong>Kullanım amacı:</strong> Mevcut uygulama demo/öğrenme ve arayüz inceleme amacı için uygundur. Gerçek ekip verileriyle üretim kullanımı için sunucu tarafı kimlik doğrulama, yetkilendirme, güvenli parola saklama, veritabanı, yedekleme ve davet altyapısı gerekir.</div>
+  </section>
+
+  <section class="section" id="setup">
+    <p class="eyebrow">07 · Geliştirici Rehberi</p>
+    <h2 class="section-title">Kurulum ve komutlar</h2>
+    <h3>Gereksinimler</h3>
+    <ul>
+      <li>Node.js ve npm</li>
+      <li>Modern bir web tarayıcısı</li>
+    </ul>
+    <h3>Yerel kurulum</h3>
+    <pre>git clone https://github.com/KayliAli/Tnc-WebProjects.git
+cd Tnc-WebProjects/TaskProject-Management
+npm install
+npm run dev</pre>
+    <p>Vite geliştirme sunucusu varsayılan olarak <code>http://localhost:5173</code> adresinde açılır.</p>
+    <h3>Npm komutları</h3>
+    <table>
+      <thead><tr><th>Komut</th><th>Açıklama</th></tr></thead>
+      <tbody>
+        <tr><td><code>npm run dev</code></td><td>Yerel geliştirme sunucusunu başlatır.</td></tr>
+        <tr><td><code>npm run lint</code></td><td>ESLint ile kaynak kodu denetler.</td></tr>
+        <tr><td><code>npm run build</code></td><td>Production çıktısını <code>dist/</code> klasörüne üretir.</td></tr>
+        <tr><td><code>npm run preview</code></td><td>Önceden oluşturulmuş production çıktısını yerelde sunar; önce <code>npm run build</code> çalıştırın.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section" id="deployment">
+    <p class="eyebrow">08 · Dağıtım</p>
+    <h2 class="section-title">Build ve dağıtım</h2>
+    <p>Uygulamanın canlı sürümü Netlify üzerinde yayınlanır: <a href="https://gorevrotasi.netlify.app">gorevrotasi.netlify.app</a>. Vite production build statik dosyaları <code>dist/</code> altında üretir.</p>
+    <p><code>public/_redirects</code> dosyasındaki <code>/* /index.html 200</code> kuralı, React Router rotalarının doğrudan açılmasını ve yenileme sonrası SPA giriş sayfasına düşmesini sağlar.</p>
+    <p>Repository’de uygulama verilerini sunucuya gönderen bir deploy ortam değişkeni veya backend yapılandırması bulunmaz. Yayındaki kullanıcı verileri de tarayıcının kendi LocalStorage alanında kalır.</p>
+  </section>
+
+  <section class="section" id="troubleshooting">
+    <p class="eyebrow">09 · Destek</p>
+    <h2 class="section-title">Sorun giderme</h2>
+    <table>
+      <thead><tr><th>Belirti</th><th>Kontrol / çözüm</th></tr></thead>
+      <tbody>
+        <tr><td>Giriş bilgisi kabul edilmiyor</td><td>Demo hesabını deneyin. Daha önce aynı origin’de hesap verisi oluşturulduysa LocalStorage’daki <code>app_users</code> başlangıç örneklerinin yerini almış olabilir.</td></tr>
+        <tr><td>Dashboard boş veya beklenmedik görünüyor</td><td>Uygulama verileri tarayıcı profilinde saklanır. Doğru origin’de olduğunuzu ve <code>app_projects</code>/<code>app_tasks</code> kayıtlarını kontrol edin.</td></tr>
+        <tr><td>Davet bağlantısı geçersiz görünüyor</td><td>Davet edilen tarayıcıda aynı proje ve davet kodu kayıtlı olmalıdır. Başka cihazdaki yerel veriler otomatik taşınmaz.</td></tr>
+        <tr><td>Direkt proje rotası yenilemede açılmıyor</td><td>Hosting’in SPA fallback kuralını etkinleştirin. Netlify için <code>public/_redirects</code> dosyasının build çıktısına kopyalandığını kontrol edin.</td></tr>
+        <tr><td>Demo verilerini sıfırlama</td><td>Tarayıcı geliştirici araçlarında uygulamanın Local Storage alanındaki <code>app_session</code>, <code>app_users</code>, <code>app_projects</code> ve <code>app_tasks</code> anahtarlarını silin, ardından sayfayı yenileyin. Bu işlem o tarayıcıdaki değişiklikleri kalıcı olarak siler.</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section class="section" id="structure">
+    <p class="eyebrow">10 · Kaynak Kod</p>
+    <h2 class="section-title">Kaynak kod yapısı</h2>
+    <pre>TaskProject-Management/
+├── public/                 # Statik varlıklar ve SPA yönlendirme kuralı
+├── src/
+│   ├── components/         # Yönetici/çalışan görünümleri ve görev arayüzleri
+│   ├── constants/          # Başlangıç örnek verileri
+│   ├── hooks/              # LocalStorage state hook'ı
+│   ├── interfaces/         # Kullanıcı, proje ve görev tip tanımları
+│   ├── pages/              # Ana sayfa, giriş, kayıt, dashboard, davet, proje
+│   ├── services/           # Yönetici ve çalışan veri işlemleri
+│   ├── utils/              # Görev durumu normalizasyonu
+│   ├── App.jsx             # Route tanımları ve oturum koruması
+│   └── main.jsx            # React uygulama başlangıcı
+├── index.html
+├── package.json
+└── vite.config.js</pre>
+    <p class="small">Temel kaynaklar: <code>src/App.jsx</code>, <code>src/services/</code>, <code>src/hooks/useLocalStorage.jsx</code>, <code>src/constants/mockData.js</code> ve <code>src/interfaces/</code>.</p>
+  </section>
+
+  <section class="section page-break" id="screenshots">
+    <p class="eyebrow">11 · Görsel Rehber</p>
+    <h2 class="section-title">Ekran görüntüleri</h2>
+    <p class="small">Görseller repository’deki <code>docs/screenshot/</code> klasöründen alınmıştır.</p>
+    <div class="screen-grid">
+      <figure><img src="screenshot/GorevRotasi-HomeScreen.png" alt="GörevRotası ana sayfası"><figcaption>Ana Sayfa</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-Future.png" alt="Özellikler bölümü"><figcaption>Özellikler</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-About.png" alt="Hakkımızda bölümü"><figcaption>Hakkımızda</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-Contact.png" alt="İletişim bölümü"><figcaption>İletişim</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-Login.png" alt="Giriş ekranı"><figcaption>Giriş Yap</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-Register.png" alt="Kayıt ekranı"><figcaption>Kayıt Ol</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-EmployeDashboard.png" alt="Çalışan paneli"><figcaption>Çalışan Paneli</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-AdminDashboard.png" alt="Yönetici paneli"><figcaption>Yönetici Paneli</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-ProjectDetails.png" alt="Proje detayları"><figcaption>Proje Detayları</figcaption></figure>
+      <figure><img src="screenshot/GorevRotasi-AddTask.png" alt="Görev ekleme"><figcaption>Görev Ekleme</figcaption></figure>
+    </div>
+  </section>
+
+</body>
+</html>

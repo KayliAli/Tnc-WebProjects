@@ -16,8 +16,9 @@ Bu uygulama, iş akışlarını sade ve verimli hale getirmek için geliştirilm
 - ekiplere görev atayabilir,
 - görev durumlarını takip edebilir,
 - önceliklendirme yapabilir,
-- davet bağlantıları paylaşabilir,
-- tüm verilerini tarayıcıda güvenli şekilde saklayabilir.
+- davet bağlantıları paylaşabilir.
+
+Uygulama verileri kullanıcının tarayıcısındaki LocalStorage alanında saklanır.
 
 ## Özellikler
 
@@ -72,39 +73,42 @@ Uygulamayı production için derlemek için:
 npm run build
 ```
 
-## Demo Hesapları
+Derleme çıktısını yerelde önizlemek için:
 
-Uygulama örnek verilerle gelir. Aşağıdaki hesaplarla giriş yapılabilir:
+```bash
+npm run preview
+```
 
-- Yönetici: `hakan` / `123456`
-- Kullanıcı: `test` / `123456`
+## Kod Kontrolü
+
+ESLint ile kod kontrolünü çalıştırmak için:
+
+```bash
+npm run lint
+```
 
 ## Proje Yapısı
 
 ```bash
 src/
+├── assets/
 ├── components/
-├── interfaces/ # User, Project ve Task veri modelleri
 ├── constants/
-├── context/
 ├── hooks/
+├── interfaces/ # User, Project ve Task veri modelleri
 ├── pages/
 ├── services/
 ├── utils/
+├── App.css
 ├── App.jsx
-├── main.jsx
 ├── index.css
-└── assets/
+└── main.jsx
 ```
 
 ## Geliştirici Notları
 
 Bu proje, tek sayfalık modern bir görev yönetimi deneyimi sunmak amacıyla geliştirilmiştir. Şu an demo/öğrenme odaklı çalışırken, ileride backend, veritabanı, kullanıcı doğrulama ve gerçek üretim senaryoları için genişletilebilir.
 
-## Katkı
+## Kapsamlı Sistem Dokümantasyonu
 
-Katkı sağlamak isterseniz, lütfen bir fork oluşturup pull request açın.
-
-## Lisans
-
-Bu proje için özel lisans uygulanmayıp, kullanım ve geliştirme için açık yapıdadır.
+Sistemin kullanım akışları, mimarisi, veri modeli, güvenlik sınırları, kurulum ve dağıtım adımları ile sorun giderme bilgileri için [GörevRotası Sistem Dokümantasyonu (PDF)](../docs/GorevRotasi-Sistem-Dokumantasyonu.pdf) dosyasına bakın.

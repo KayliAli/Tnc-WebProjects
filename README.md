@@ -1,38 +1,40 @@
 # Tnc-WebProjects
 
-<p align="center">
-  <img src="https://img.shields.io/badge/Projects-2-0A66C2?style=for-the-badge" alt="Project Count" />
-  <img src="https://img.shields.io/badge/Stack-React%20%2B%20Vite-61DAFB?style=for-the-badge&logo=react" alt="React + Vite" />
-</p>
+Bu repository, ekiplerin projelerini ve görevlerini takip etmesi için geliştirilen **GörevRotası** uygulamasını içerir. Uygulama; tanıtım sayfalarının yanı sıra çalışan ve yönetici panelleri üzerinden proje ve görev yönetimi sunar.
 
-Tnc-WebProjects, modern web uygulamaları ve mini ölçekli geliştirme projelerini barındıran bir repository yapısıdır. Her proje ayrı bir kullanım senaryosu ve teknolojik hedef doğrultusunda tasarlanmıştır.
+## Canlı Uygulama
 
-## Ana Projeler
+[GörevRotası'nı aç](https://gorevrotasi.netlify.app)
 
-- [TaskProject-Management](./TaskProject-Management) — görev ve proje yönetimi uygulaması
+## Ekran Görüntüleri
 
-## Proje Hızlı Bakış
+| Ana Sayfa | Özellikler |
+| --- | --- |
+| ![GörevRotası ana sayfası](./docs/screenshot/GorevRotasi-HomeScreen.png) | ![Özellikler bölümü](./docs/screenshot/GorevRotasi-Future.png) |
 
-### TaskProject-Management
+| Hakkımızda | İletişim |
+| --- | --- |
+| ![Hakkımızda bölümü](./docs/screenshot/GorevRotasi-About.png) | ![İletişim bölümü](./docs/screenshot/GorevRotasi-Contact.png) |
 
-- React + Vite tabanlı geliştirme
-- Yönetici ve çalışan rolleri
-- Proje detay ve görev takibi
-- LocalStorage destekli veri saklama
-- Responsive ve modern arayüz
+| Giriş Yap | Kayıt Ol |
+| --- | --- |
+| ![Giriş ekranı](./docs/screenshot/GorevRotasi-Login.png) | ![Kayıt ekranı](./docs/screenshot/GorevRotasi-Register.png) |
 
-## Hızlı Başlangıç
+| Çalışan Paneli | Yönetici Paneli |
+| --- | --- |
+| ![Çalışan paneli](./docs/screenshot/GorevRotasi-EmployeDashboard.png) | ![Yönetici paneli](./docs/screenshot/GorevRotasi-AdminDashboard.png) |
+
+| Proje Detayları | Görev Ekleme |
+| --- | --- |
+| ![Proje detayları](./docs/screenshot/GorevRotasi-ProjectDetails.png) | ![Görev ekleme](./docs/screenshot/GorevRotasi-AddTask.png) |
+
+## Yerelde Çalıştırma
 
 ```bash
 git clone https://github.com/KayliAli/Tnc-WebProjects.git
-cd Tnc-WebProjects
-cd TaskProject-Management
+cd Tnc-WebProjects/TaskProject-Management
 npm install
 npm run dev
 ```
 
-
-
-## Notlar
-
-Detaylı kullanım bilgisi ve proje özel açıklamalar için ilgili proje klasöründeki README dosyasına bakınız.
+Projenin ayrıntıları için [TaskProject-Management README](./TaskProject-Management/README.md) dosyasına bakın.
